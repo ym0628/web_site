@@ -45,3 +45,13 @@ about
   font-size: 30px;
 }
 /* .about-description {} */
+
+/*
+feature
+*/
+.grid {
+  display: flex;
+}
+.grid-item {}
+.grid-col-4 {}
+.grid-col-4 > .grid-item {}
