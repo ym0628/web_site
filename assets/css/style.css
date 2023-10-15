@@ -16,11 +16,9 @@ section
 .section {
   padding: 30px 15px;
 }
-
 .section.section-secondary {
   background: #efefef;
 }
-
 .section-headline {
   text-align: center;
   font-size: 40px;
@@ -47,11 +45,43 @@ about
 /* .about-description {} */
 
 /*
-feature
+grid
 */
 .grid {
+  margin: 0;
+  padding: 0;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.grid-item {}
-.grid-col-4 {}
-.grid-col-4 > .grid-item {}
+.grid-item {
+  list-style: none;
+}
+.grid-col-2 > .grid-item {
+  width: 50%;
+}
+.grid-col-3 > .grid-item {
+  width: 33.3%;
+}
+.grid-col-4 > .grid-item {
+  width: 25%;
+}
+
+/*
+feature
+*/
+.feature {
+  text-align: center;
+  padding: 0 15px;
+}
+.feature-headline {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.feature-image {
+  margin-bottom: 20px;
+}
+.feature-discription {
+  margin: 0;
+  text-align: left;
+}
