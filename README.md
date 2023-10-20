@@ -24,6 +24,7 @@ https://qiita.com/ym0628/items/c348d5620fecdaf032bd
 
 https://qiita.com/twipg/items/d8043cd4681a2780c160
 
+https://www.webcreatorbox.com/tech/css-flexbox-cheat-sheet
 
 
 ## <font color="Teal">制作ログ</font>
@@ -780,10 +781,807 @@ about
 <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/f3182a5e-0792-9564-e637-8ec69f747a11.jpeg" alt="Featureセクションの途中経過画像" width=50%>
 
 
+
+***2023/10/14***
+
 ### ***<font color="SteelBlue">Featureセクションの４つ小見出しに画像を挿入し、横並びにする</font>***
 
 
-### ***✅つぎはここから （動画24分15秒〜）***
+- まずはアイコン画像がFree素材なので、ネットから探してくる
+- 検索`free icon images`
+- こちらのサイトから持ってくる
+- https://www.flaticon.com/
+- サイト内で適当に`feature`とかで検索
+- 好きな画像を選択して`add`赤いアイコン
+- 右上`コレクション`で選択した画像をダウンロード
+- 拡張子を選択。今回は256サイズを選択してダウンロード
+- Finderのダウンロードフォルダに落とされるので、
+- それをローカルブランチ`create_site`の
+- `~/assets/images`フォルダにぶち込む
+- アイコン画像の名前は任意で変えてもいいだろう。
+- 本来なら相応しい名前に変えるのが良さそうだね。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/58f2d65a-ae4a-490c-8042-aa6500a3d313.jpeg" alt="画像をブッ込む" width=50%>
+
+- 次に、使いまわせるコンポーネントを作っていく。
+- `grid`というクラス名から始まるものを定義し、
+- それをCSSでも定義して、デザインを適用していこう。
+- コンポーネントという呼び方をすることがあるので、そんな感じだと覚えておく。
+- 取り込んだ画像のパスを、imgタグのsrc属性に指定する。これで画像を読み込んでくれる。
+- `./`とすることで、ホームディレクトリを省略できる。
+
+
+```diff_html
+  <section class="section section-secondary">
+    <h1 class="section-headline">Feature</h1>
+
++   <ul class="grid grid-col-4">
++     <li class="grid-item">
+        <dl>
+          <dt>1.Great Service</dt>
+          <dd>
++           <img src="./assets/images/1_great_service.png" alt="Great Service">
+          </dd>
+          <dd>Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
++     <li class="grid-item">
+        <dl>
+          <dt>2.High Performance</dt>
+          <dd>
++           <img src="./assets/images/2_high_performance.png" alt="High Performance">
+          </dd>
+          <dd>Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
++     <li class="grid-item">
+        <dl>
+          <dt>3.Strong Responsibility</dt>
+          <dd>
++           <img src="./assets/images/3_strong_responsibility.png" alt="Strong Responsibility">
+          </dd>
+          <dd>Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
++     <li class="grid-item">
+        <dl>
+          <dt>4.Excellent Technology</dt>
+          <dd>
++           <img src="./assets/images/4_excellent_technology.png" alt="Excellent Technology">
+          </dd>
+          <dd>Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
+    </ul>
+
+  </section>
+```
+
+- `class="grid grid-col-4"`の数字の意味は？
+- おそらく、幅のこと、
+- つまり、横並びにするために、`１行に4つのコンポーネント`があるよ、ということを宣言しているんだ！
+- Bootstrapライクなクラスの指定の仕方だけど、こんな感じで手作りみたいにもできる。
+- 行全体を１２等分した時に、４くらいの幅を持たせようとしているのではないかなぁ_？
+- ちなみに、`<ul>タグは一つでOK`。間違って４つ定義してしまっていたので削除。
+- `grid-item`クラスは4つ分、コピペして定義しておく。
+- 次にCSSに上記で定義したクラス名をもとにコンポーネント化していく。
+- ***子要素として`>`というコードを付けている。これは初めて知ったかも！***
+- 
+
+```diff_css
+/*
+feature
+*/
+.grid {}
+.grid-item {}
+.grid-col-4 {}
+.grid-col-4 > .grid-item {}
+```
+
+- 大元となる`.grid {}`クラス
+- ４つある各コンテンツのクラス`.grid-item {}`
+- そして、4つ並びに対する？クラス`.grid-col-4 {}`
+- さらに、親子関係を定義するコード`.grid-col-4 > .grid-item {}`
+- このように分解してコンポーネント化している。
+- これで使い回ししやすい、コードになるってことかな。
+- リファクタリングしやすい。可読性の高い、チーム開発に必要な考え方であると思われる。
+- 続けて、定義したCSSにデザインを適用していく。
+- `.grid { display: flex; }`は、要素を横並びにするコード。
+- 大元にとなる`.gird`に適用させる。
+- これだけで要素が横並びになったよ！
+- 大元の`.grid`というクラスに`display: flex;`を定義したことによって、
+- 他のセクションの３カラムの横並びとか、5つ並びの横並びとか、
+- いろんなgridパターンに、この`display: flex;`を使い回すことができるのだ❗️
+- これは非常に重要！
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/ed92ba61-1d39-0d5f-7122-6d230b59870f.jpeg" alt="横並びになったコンテンツ" width=50%>
+
+
+- 一旦、ここでコミットしておく。
+- コミット・プッシュ後は、コンフリクトを回避するため、
+- ここまで使用してきたブランチを、ローカル・リモート共に削除しておく。
+- 改めてローカルブランチを切り直して、実装を続けていくことにする。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/4a7fda8f-f687-3b18-595d-92fa0642ebf8.jpeg" alt="不要なリモートブランチを削除する場所" width=75%>
+
+
+***2023/10/15***
+
+
+- アイコン画像が大きいので、調整していく。
+- 具体的には`<img>`タグのwidth heightを調整する。
+- 横幅を均等に並べるために`width`をCSSに適用させる。
+- `.grid-col4`が不要なので削除。
+- Featureセクションでは４等分にするのでcol4だが、
+- 他のセクションでは２等分だったり３等分だったりするので、
+- col2やcol3といったものもあとで必要になってくる。
+- なので、それも作っておく。
+- 以下のようになる。
+- その他、自動的に適用されるCSSで不要なものを当てないように指示する。
+- 参考サイト：https://www.webcreatorbox.com/tech/css-flexbox-cheat-sheet
+- 
+
+
+```diff_css:style.css（追加実装分）
+/*
+grid
+*/
+.grid {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.grid-item {
+  list-style: none;
+}
+.grid-col-2 > .grid-item {
+  width: 50%;
+}
+.grid-col-3 > .grid-item {
+  width: 33.3%;
+}
+.grid-col-4 > .grid-item {
+  width: 25%;
+}
+
+/*
+feature
+*/
+.feature {
+  text-align: center;
+  padding: 0 15px;
+}
+.feature-headline {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.feature-image {
+  margin-bottom: 20px;
+}
+.feature-discription {
+  margin: 0;
+  text-align: left;
+}
+```
+
+  `margin: 0;`cssで余分に付いている空白を０にする。
+  `padding: 0;`cssで余分に付いている空白を０にする。
+  `display: flex;`要素を自動的に横並びにする。
+  `align-items: center;`は、display flexが付いている要素を中央揃えする
+  `justify-content: center;`は、親要素に空きスペースがあった場合、子要素を水平方向のどの位置に配置するかを指定するCSSコード。
+  `list-style: none;`は、CSS自動適用時にgridアイテムに箇条書きで使う「・」が勝手についてしまうので、それを無効化する。
+
+
+```diff_html:index.html
+    <ul class="grid grid-col-4">
+      <li class="grid-item">
++       <dl class="feature">
++         <dt class="feature-headline">1.Great Service</dt>
++         <dd class="feature-image">
++           <img src="./assets/images/1_great_service.png" width="100" height="100" alt="Great Service">
+          </dd>
++         <dd class="feature-discription">Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
+      <li class="grid-item">
++       <dl class="feature">
++         <dt class="feature-headline">2.High Performance</dt>
++         <dd class="feature-image">
++           <img src="./assets/images/2_high_performance.png" width="100" height="100" alt="High Performance">
+          </dd>
++         <dd class="feature-discription">Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
+      <li class="grid-item">
++       <dl class="feature">
++         <dt class="feature-headline">3.Strong Responsibility</dt>
++         <dd class="feature-image">
++           <img src="./assets/images/3_strong_responsibility.png" width="100" height="100" alt="Strong Responsibility">
+          </dd>
++         <dd class="feature-discription">Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
+      <li class="grid-item">
++       <dl class="feature">
++         <dt class="feature-headline">4.Excellent Technology</dt>
++         <dd class="feature-image">
++           <img src="./assets/images/4_excellent_technology.png" width="100" height="100" alt="Excellent Technology">
+          </dd>
++         <dd class="feature-discription">Text text text text text text text text text text text text text text text text text...</dd>
+        </dl>
+      </li>
+    </ul>
+```
+
+- `width="100" height="100"`で、画像の横幅、縦幅を指定する。
+- 画像の大きさ指定はCSSスタイルで当てることもできるが、htmlに指定するのが手っ取り早い。
+- これをどっちするのかは、企業やクライアントによって要求が異なりそうだ。
+- さらにデータリストタグにもCSSスタイルを適用させたいので、
+- `<dl>`と`<dt>`と`<dd>`タグにclass名を定義する。
+- CSSスタイルの状況は`Googleデベロッパーツール`を活用してCSSの状況を確認する。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/62a2d63a-d947-8061-5c7b-eef18b399bcb.jpeg" alt="Googleデベロッパーツールを活用してCSSの状況を確認する" width=50% height=50%>
+
+- 完成したFeatureセクションの画像
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/ab8cc523-e4ef-6cc4-5cf9-1c5c7180d5b4.jpeg" alt="完成したFeatureセクションの画像" width=66% height=66%>
+
+
+***ここで一旦コミットしておく。***
+
+
+***2023/10/16***
+
+### ***<font color="SteelBlue">Blogセクションのコーディング</font>***
+
+こんな感じの完成イメージとなる。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/7c3ca3b3-e005-ecec-d1e3-bed666d82c32.jpeg" alt="Blogセクション完成イメージ" width=50% height=50%>
+
+
+- まずは大体おんなじ要領で、流用できるヘッドラインあたりのhtmlタグをコピペしてくる。
+- 背景は白なので、`section-secondary`はいらない。
+- カラムは今回3つなので、`col-4`じゃなくて`col-3`にする。
+- このカラムを３つ作ってあげる。
+- すると、この時点で、3つの要素が横並びになったリストが出来上がる。
+- これは、前回、`.grid-col-3 > .grid-item { width: 33.3%; }`というCSSスタイルを適用させているため。
+- つまり、スタイルも流用できるわけだ！便利！
+
+
+### ***<font color="SteelBlue">【Blogセクション】articleタグ（html）</font>***
+
+- articleというタグを使っていく。
+- ブログ記事なので、articleというhtmlで使える便利なタグがある。
+- さらにcardというタグでカードみたいに縦長のエリアを作ってくれるタグを使う。
+- `article.card`と入力してEnterを押すと、自動的に、、
+- `<article class="card"></article>`というタグを作ってれる。
+- これはVScodeの予測変換の標準機能もしくは、拡張機能によるものである。
+- ブログ記事のエリアをクリックするだけで、その記事のリンクに飛んでくれる。
+- これがcardタグの良いところである。
+- その中にアンカーリンクタグを用意してあげる`<a href=""></a>`
+- さらにその中に、クラスを定義してあげてる。
+- `<a href="#" class="card-link"></a>`としてみる。
+- 新しい記事に`span`タグでNewという文字を付け、クラス名は`class="card-label"`とする。
+- spanは特に意味を持たないタグ。装飾のためだけに付けている。
+- ブログ記事のイメージ画像には前回も使用したダミーを用意する。
+- 今回は200*100のイメージ画像を用意する。
+- 画像のURLを`src=""`に入れる。
+- また、画像にもクラスを定義`img class="card-image"`
+- alt属性は`thumbnail`とする。
+- 次に、`<div class="card-info"></div>`を定義。
+- この中に`time`タグをつけておく。これは日付を表すタグのこと。
+- この時VScodeの書き方として`time.card-time`と打つと、予測変換で、クラス名をつけたtimeタグ`<time class="card-time"></time>`を簡単に生成できる。このショートカットはかなり便利！
+- このtimeタグには必ず？datetime属性も漏れなくつけてあげよう！
+- `datetime="yyyy-mm-dd"`
+- 今回は、このコード実装日である2023-10-15を入力してあげる。
+- この属性を付与することはブラウザに、この数字が日付であることを認識させることを目的としている重要な属性だ。
+- あと、h1タグとpタグを用意する。
+- h1を使っているのは前回の通り、articleタグがセクショニングタグであるからだ。
+- 自動的に見出しの階段がひとつ落ちるように設計されているため、h1を使っても良いということである。
+- 次に、投稿者を表しているアバターアイコンも用意する。
+- ここはデータリストタグ３種類を使用する
+- `<dl>`アバター
+- `<dt>`著者の名前
+- `<dd>`アバターイメージ画像（ダミー画像サイトから持ってくる）
+- ここでのダミー画像のimgタグにはクラスは設けなかった（時と場合によるかも。）
+- ここまでの途中経過をサイトで見ると、、、こんな感じ。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/6db62ff2-e42b-b9d0-3ab7-dfe19c6962fd.jpeg" alt="Blogセクション途中経過イメージ" width=50% height=50%>
+
+- 追加したコードはこんな感じ。
+
+```html:index.html
+  <section class="section">
+    <h1 class="section-headline">Blog</h1>
+
+    <ul class="grid grid-col-3">
+      <li class="grid-item">
+        <article class="card">
+          <a href="#" class="card-link"></a>
+            <span class="card-label">New</span>
+            <img class="card-image" src="https://dummyimage.com/200x100/f5c7f5/000000" alt="thumbnail">
+            <div class="card-info">
+              <time class="card-time" datetime="2023-10-15">2023.10.15</time>
+              <h1 class="card-headline">Title text text text text text text text text</h1>
+              <p class="card-description">Text text text text text text text text text text text text text text text text...</p>
+            </div>
+            <dl class="avator">
+              <dt class="avator-name">Tanaka</dt>
+              <dd class="avator-image">
+                <img src="https://dummyimage.com/50x50/000/fff" alt="Author">
+              </dd>
+            </dl>
+        </article>
+      </li>
+      <li class="grid-item">
+        <article class="card">
+          <a href="#" class="card-link"></a>
+            <span class="card-label"></span>
+            <img class="card-image" src="https://dummyimage.com/200x100/f5c7f5/000000" alt="thumbnail">
+            <div class="card-info">
+              <time class="card-time" datetime="2023-10-15">2023.10.15</time>
+              <h1 class="card-headline">Title text text text text text text text text</h1>
+              <p class="card-description">Text text text text text text text text text text text text text text text text...</p>
+            </div>
+            <dl class="avator">
+              <dt class="avator-name">Tanaka</dt>
+              <dd class="avator-image">
+                <img src="https://dummyimage.com/50x50/000/fff" alt="Author">
+              </dd>
+            </dl>
+        </article>
+      </li>
+      <li class="grid-item">
+        <article class="card">
+          <a href="#" class="card-link"></a>
+            <span class="card-label"></span>
+            <img class="card-image" src="https://dummyimage.com/200x100/f5c7f5/000000" alt="thumbnail">
+            <div class="card-info">
+              <time class="card-time" datetime="2023-10-15">2023.10.15</time>
+              <h1 class="card-headline">Title text text text text text text text text</h1>
+              <p class="card-description">Text text text text text text text text text text text text text text text text...</p>
+            </div>
+            <dl class="avator">
+              <dt class="avator-name">Tanaka</dt>
+              <dd class="avator-image">
+                <img src="https://dummyimage.com/50x50/000/fff" alt="Author">
+              </dd>
+            </dl>
+        </article>
+      </li>
+  </section>
+```
+
+- ここまではhtmlのコードを実装してきた。
+- この後は、CSSスタイルを適用させて、見栄えの良い感じにしていく。
+
+### ***<font color="SteelBlue">ちょっとした問題を解決</font>***
+- なぜか、アンカーリンクを設けたのに、リンク先に飛ばないぞ、、、、
+- 問題解決❗️
+- <a></a>タグの、閉じタグをすぐに閉じてしまっていた。
+- `<a href="#" class="card-link"></a>`❌
+- 以下が正解⭕️
+
+```diff_html
++ <a href="#" class="card-link">
+    ＜中略＞
+    ＜中略＞
++ </a>
+```
+
+
+### ***<font color="SteelBlue">【Blogセクション】作成したarticleタグにCSSを適用する</font>***
+
+### ***2023/10/17***
+
+- `Shit + Tab`で、インデントを一挙に揃えることができる。
+- `<article class="card">`つまり、cardクラスを全部引っ張ってきて、CSSに引っ張ってくる。
+- `a href`タグは、インライン要素である。
+- そのため、blockスタイルで囲ってあげる必要があるらしい。
+- `.card-link { display: block; }`となる。
+- `text-decoration: none;`は、アンカーリンクにアンダーバーが勝手に適用されるのを無効化する。
+- 何もしていないと、`text-decoration: underline;`となり、リンクのテキストにアンダーバーが入るようになる。
+- リンクタグのスタイルに`position: relative;`
+- ラベルタグのスタイルに`position: absolute;`
+- と、入れてあげると、以下のようになる。
+- 画像のなかにテキストが入り込んで、ラベルが出来上がる。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/cd5923d8-1c7e-e984-2f43-ef9b4773d6c8.png" alt="positionスタイルを適用した時の画像" width=50% height=50%>
+
+- ラベルの背景や文字色などをつけて、体裁を整えてあげると、こんな感じになる。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/a1289c40-8390-287e-d16b-e6d60391b16b.png" alt="Newラベルの出来上がり画像" width=50% height=50%>
+
+- ラベルの部分の出来上がりコードを抜粋するとこんな感じ。
+
+```css:style.css
+.card-link {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  position: relative;
+}
+.card-label {
+  position: absolute;
+  background-color: #999;
+  color: #fff;
+  display: block;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+```
+
+- 親要素のアンカーリンクタグに`position:relative`をつけた状態で、、、
+- 子孫・子要素に`position:absolute`をつけると、、、、
+- `position:relative`の中で自由に動かすことが出来る。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/fc60fe88-871d-40ab-e30f-420298517926.jpeg" alt="ラベルのpositionをデベロッパーツールで自由に動かしている様子" width=50% height=50%>
+
+- 次に、hoverした時の色を変えたい。
+- `.card-link:hover`というクラスを別に定義してあげる。
+- `background-color: #eee;`としてあげることで、hoverした時に、薄いグレーの色がかかる。
+- さらに、`transition`を指定する。
+- これは、指定したプロパティ（CSSスタイル）に対して、プロパティが変化するまでの秒数を指定することができる優れものである❗️
+- `background-color`と、指定となるプロパティ名を付けて、、、、
+- `.25s`と指定することで、`0.25秒`ホバー色が変化するタイムラグを意図的に発生させることができる❗️
+- 今回は、自分好みの`0.75秒`を指定してみた。
+- このtransitionは、アニメーションを作りたい時にも便利なので、おすすめらしい。
+- どうやって応用するのかは知らない、、、が。
+
+
+***2023/10/19***
+
+- card-imageが少し小さいので
+- 横幅をcard一杯に広げる⇨100％
+- それに合わせて高さは比率を保つようにautoを指定する。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/0950cab9-6481-6f9f-e61e-6f4b72c686b6.jpeg" alt="width変更前" width=50% height=50%>
+
+:::note info
+これがこのように横幅いっぱいに画像を広げてくれます。
+:::
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/5c31e4b2-e5fb-54e9-eea8-c9080ea8210c.jpeg" alt="width変更後" width=50% height=50%>
+
+
+- その他、card-infoなどのテキストが全体的にpaddingが狭いので、
+- 微妙に開けてあげる。
+- `.card-time {}`は一旦、CSS当てずにコメントアウトしておく
+- 
+
+:::note warn
+htmlタグ`<dt>と<dd>`の特性上、必ずdtが左側に先に来てしまうという特性がある。そんな時は、`flex-direction: row-reverse;`で横並びの順番を逆にできる！
+:::
+
+- `justify-content: start;`で横並びにしたdt、ddタグの要素を左側に寄せることができる。
+- その他、`avator`に対してCSSプロパティの`padding`を付けて、上下の間隔を少し開ける。
+- また、Newというラベルは一つだけにしたいので、<span>タグで定義していた箇所は3の2を削除。
+
+
+:::note info
+画像を丸くしたい場合は、`border-radius 50%`と`overflow :hidden`をセットで使おう！
+:::
+
+- 最後に、ボタンをつける。
+- `Blog Page`ボタンをつける。
+- `a.button`と入力すれば、、、
+- `<a href="#" class="button"></a>`を自動生成してくれる。
+- VScode最高！
+- `display: inline-block;`はインライン要素でもあり、ブロック要素でもある
+- みたいな振る舞いをさせることができる魔法である。
+- 具体的には、横並びにもできるんだけど、上下左右にpadding/marginを持つことができる、
+- 便利なプロパティである。
+- `box-shadow`は影をつけるプロパティである。
+- `box-shadow: 5px 5px 0 #bbb;`を分解すると、、、
+- 最初の5pxはX軸、つまり、横にどれくらいはみ出しますか？という値を指定している。
+- 次の5pxはY軸、つまり、縦、下にどれくらいはみ出しますか？という値を指定している。
+- 0という箇所は、ボヤーっと感を出す値。0だと、そのままの色。
+- 10pxとかにすると、ボヤッと薄い影みたいにすることができる。
+- 最後に色を指定すれば影の出来上がり。
+
+:::note info
+さらに、ボタンにもホバーを設定して、transitionも設定するとオシャレ。
+:::
+
+- あとは、ボタンのmarginとかを設定して間隔をいい感じに空けるだけとなるが、、、
+- ボタンは、この箇所だけでなく、複数用意しているのがこのサイトである。
+- なので、ボタンに対しても、divタグでクラス名を定義してあげて、
+- 汎用性の高いhtmlコードにしていこう！
+- セクションごとにボタンを用意する場面があるため、
+- `<section-button>`というクラス名をdivタグで設定してあげる。
+- `.section-button { margin-top: 40px; text-align: center;}`
+- こうしてあげることで、ボタンのCSSを使い回すことができますよ！
+
+
+```html:index.html
+  <section class="section">
+    <h1 class="section-headline">Blog</h1>
+
+    <ul class="grid grid-col-3">
+      <li class="grid-item">
+        <article class="card">
+          <a href="#" class="card-link">
+            <span class="card-label">New</span>
+            <img class="card-image" src="https://dummyimage.com/200x100/f5c7f5/000000" alt="thumbnail">
+            <div class="card-info">
+              <time class="card-time" datetime="2023-10-15">2023.10.15</time>
+              <h1 class="card-headline">Title text text text text text text text text</h1>
+              <p class="card-description">Text text text text text text text text text text text text text text text text...</p>
+            </div>
+            <dl class="avator">
+              <dt class="avator-name">Tanaka</dt>
+              <dd class="avator-image">
+                <img src="https://dummyimage.com/50x50/000/fff" alt="Author">
+              </dd>
+            </dl>
+          </a>
+        </article>
+      </li>
+      <li class="grid-item">
+        <article class="card">
+          <a href="#" class="card-link">
+            <img class="card-image" src="https://dummyimage.com/200x100/f5c7f5/000000" alt="thumbnail">
+            <div class="card-info">
+              <time class="card-time" datetime="2023-10-15">2023.10.15</time>
+              <h1 class="card-headline">Title text text text text text text text text</h1>
+              <p class="card-description">Text text text text text text text text text text text text text text text text...</p>
+            </div>
+            <dl class="avator">
+              <dt class="avator-name">Tanaka</dt>
+              <dd class="avator-image">
+                <img src="https://dummyimage.com/50x50/000/fff" alt="Author">
+              </dd>
+            </dl>
+          </a>
+        </article>
+      </li>
+      <li class="grid-item">
+        <article class="card">
+          <a href="#" class="card-link">
+            <img class="card-image" src="https://dummyimage.com/200x100/f5c7f5/000000" alt="thumbnail">
+            <div class="card-info">
+              <time class="card-time" datetime="2023-10-15">2023.10.15</time>
+              <h1 class="card-headline">Title text text text text text text text text</h1>
+              <p class="card-description">Text text text text text text text text text text text text text text text text...</p>
+            </div>
+            <dl class="avator">
+              <dt class="avator-name">Tanaka</dt>
+              <dd class="avator-image">
+                <img src="https://dummyimage.com/50x50/000/fff" alt="Author">
+              </dd>
+            </dl>
+          </a>
+        </article>
+      </li>
+    </ul>
+
+    <div class="section-button">
+      <a href="#" class="button">
+        Blog Page
+      </a>
+    </div>
+  </section>
+```
+
+
+
+```diff_css:style.css
+<中略>
+
+.section-button {
+  margin-top: 40px;
+  text-align: center;
+}
+
+<中略>
+
+/*
+card
+*/
+.card {
+  padding: 0 10px;
+}
+.card-link {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  position: relative;
+  transition: background-color .75s;
+}
+.card-link:hover {
+  background-color: #eee;
+}
+.card-label {
+  position: absolute;
+  background-color: #999;
+  color: #fff;
+  display: block;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.card-image {
+  width: 100%;
+  height: auto;
+}
+.card-info {
+  padding: 5px 10px;
+}
+/* .card-time {} */
+.card-headline {
+  margin: 0;
+}
+.card-description {
+  margin: 0;
+}
+
+/*
+avotor
+*/
+.avator {
+ display: flex;
+ flex-direction: row-reverse;
+ justify-content: start;
+ padding: 10px; 
+}
+.avator-name {
+  font-weight: bold;
+  padding-left: 15px;
+}
+.avator-image {
+  margin: 0;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/*
+button
+*/
+.button {
+  display: inline-block;
+  color: #fff;
+  font-weight: bold;
+  background-color: #333;
+  text-align: center;
+  padding: 15px 60px;
+  text-decoration: none;
+  border-radius: 5px;
+  box-shadow: 5px 5px 0 #bbb;
+  transition: box-shadow .50s;
+}
+.button:hover {
+  box-shadow: 0 0 0
+}
+```
+
+- 以上で、Blogセクションの実装は終了となる。
+- 完成セクションのイメージはこちら。
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/3c1fb6e6-a164-3238-fa25-c3801f52cc4d.jpeg" alt="" width=50% height=50%>
+
+ここでコミットしておきます。
+
+
+
+***2023/10/20***
+### ***<font color="SteelBlue">【Contactセクション】のコーディング〜html〜</font>***
+
+
+- 見本はこう。
+- コンタクトフォームの見た目を作る。
+- こんな感じのを作っていく。
+- あくまでも見た目。
+- メーラーの実装などは、バックエンドエンジニアのお仕事である。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/c5dc5359-fbb1-04f3-6f38-4e0a6845c9aa.jpeg" alt="Contactセクションの見本イメージ画像" width=50% height=50%>
+
+
+- 相変わらず`<section>`タグは使いまわせそう。
+- 背景は`Feature`セクションで使った`secondary`クラスを流用できるね。
+- 今回使うのは`<form>`タグ。
+- ボタンを押してパラメーターを送信するようなインタラクティブな要素を使う時、
+- formタグはバックエンドとの連携が取りやすく、重宝する。
+- html5では、`form`と打つだけで、`<form action=""></form>`が自動生成してくれる。最高！
+- ほんで、このformタグ内にコンタクトフォームの見た目を作っていくわけだが、
+- まず使うのは`<table>`タグである。
+- あと、それぞれにクラス名も定義しておく。
+- ここまでの`index.html`の実装はこんな感じ。
+
+```html
+  <section class="section section-secondary">
+    <h1 class="section-headline">Contact</h1>
+
+    <form class="form" action="">
+      <table class="form-table">
+        
+      </table>
+    </form>
+  </section>
+```
+
+- 続いてテーブル内のhtmlの実装だ。
+- tableタグはセットで覚える（dlやdt、ddタグみたいにセットで覚える）
+- trはtable rowつまり、行のこと。枠を作る。
+- thはtable headlineつまり、見出しのこと。名前とかメールアドレスとか。
+- tdはtable dataつまり、各値となる。入力フォームなどの空欄のボックスを入れたり。
+
+
+```html
+      <table class="form-table">
+        <tr>
+          <th></th>
+          <td></td>
+        </tr>
+      </table>
+```
+
+- 見本ではこの行が5行あるので、
+- このセットを5つ分コピペして作っておく。
+- では、まずは1行目から作っていく。
+- ここはプルダウンの選択肢を作る。
+- ひとまずこんな感じに実装する。
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/b1ead093-3c07-f769-088a-b0e7a6122d77.jpeg" alt="selectタグ実装した際のイメージ画像" width=50% height=50%>
+
+
+```html
+        <tr>
+          <th>Menu</th>
+          <td>
+            <select name="" id="">
+              <option value="menu-1">Menu 1</option>
+              <option value="menu-2">Menu 2</option>
+              <option value="menu-3">Menu 3</option>
+            </select>
+          </td>
+        </tr>
+```
+- selectタグでプルダウンを作る。
+- optionタグはプルダウンの選択肢の項目を作る。
+- valueはバックエンド側に送信するパラメーターの名前。
+- `Menu 1`がクライアント側に見える見た目の選択項目である。
+- `<select name="" id="">`のname属性やid属性は、バックエンド側に送信するもの。
+- 今回はフロントエンドのみの実装のため、ここでは深掘りしない。
+- 一旦、ここの属性は削除しておく。
+
+***labelタグ***
+- labelタグをつけると、ラベルをクリックしたときに、
+- そこのフォームに勝手にフォーカスしてカーソルが移動してくれるという優れもののプロパティだ。
+
+```html
+        <tr>
+          <th>
+            <label for="name">
+              Name
+            </label>
+          </th>
+          <td>
+            <input type="text" id="name">
+          </td>
+        </tr>
+```
+
+:::note info
+- labelのfor属性にnameと入れてあげる
+- その次のinputタグにid属性を定義し、同じnameという名前で関連づけてあげる。
+- こうすることで、フォーカス機能を付与することができる！
+:::
+
+- 同じ要領で、emailにもlabelタグをつけたフォームを作ってあげよう。
+- 
+
+
+現在、見た目はこんな感じ。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/1d755fd4-a8a3-427d-eacd-7de0f2dcbbcc.jpeg" alt="フォームの途中経過イメージ画像" width=50% height=50%>
+
+
+***2023/10/21***
+
+### ***✅つぎはここから （動画 1時間00分15秒〜）***
 
 
 
@@ -795,15 +1593,13 @@ about
 
 
 
-
-
-
-
-
+<br><br>
+<br><br>
+<br><br>
 
 # よく使うhtmlタグ
 
-`<img src="" alt="" width=50%>`
+`<img src="" alt="" width=50% height=50%>`
 `<img src="" alt="" width=50%>`
 `<img src="" alt="" width=50%>`
 
