@@ -9,6 +9,12 @@ body {
   line-height: 1.5;
   color: #333;
 }
+label, select, input, textarea, button {
+  cursor: pointer;
+}
+button {
+  border: 0;
+}
 
 /*
 grid
@@ -165,3 +171,57 @@ button
 .button:hover {
   box-shadow: 0 0 0
 }
+.button.button-submission {
+  background-color: #92d3ca;
+}
+
+/*
+.select, .input, .radio, .textarea,
+*/
+.select {
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  min-width: 500px;
+}
+.input {
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  min-width: 500px;
+}
+.radio {
+  margin: 0 10px;
+}
+.textarea {
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  min-width: 500px;
+  min-height: 100px;
+}
+
+/*
+form
+*/
+/* .form {} */
+.form-table {
+  margin: 0 auto;
+}
+/* .form-table tr {} */
+.form-table th {
+  padding: 10px;
+  text-align: left;
+}
+.form-table td {
+  padding: 10px;
+}
+.form-button {
+  margin: 20px;
+  text-align: center;
+}
+
+
+
+
+
