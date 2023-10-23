@@ -1580,8 +1580,234 @@ button
 
 
 ***2023/10/21***
+***ラジオボタンの実装***
 
-### ***✅つぎはここから （動画 1時間00分15秒〜）***
+- 性別にはinputタグの属性でradioをつける。
+- それぞれのragio項目にname属性でgenderという名前をつけてあげると、
+- radioボタンはどれか一つにしかチェックをつけられないように制限をかけることができる。
+- これはname属性を与えることで、3つの選択肢が一つのグループとして認識させることができるから。
+- さらにvalue属性を与え、バックセンド側に認識させるパラメターとして設定することも忘れずに。
+- さらに、こういうやつこそ、labelタグで囲ってあげると、親切だよ。
+- この時のlabelタグには for属性はつけずに、その中のinputタグのテキスト「Male」に対して指定してあげる。
+- ちなみに、radioというタイプのほかに、heckboxというタイプもある。
+- radioが単一選択であるのに対し、checkboxは複数選択が可能となる特徴がある。
+- 
+
+
+***テキストエリアの実装***
+
+- html5で`textarea`と入れるだけで、、、
+- `<textarea name="" id="" cols="30" rows="10"></textarea>`を自動生成してくれる。最高❗️
+- colsは1行あたりの半角で入る文字数
+- rowsは行数
+- この数のテキストエリアを生成してくれる。
+- nameとidはバックエンド側へのパラメーターに関わるものなので今回は割愛。
+
+***送信ボタンの実装***
+
+- 送信ボタンを作る。
+- 先に作った「Blog page」ボタンを同じhtmlタグを流用したいところだが、ここは違う、
+- `<button>`タグを使用する。
+- アンカーリンクではなく、値をバックエンド側に送信するボタンであるため、
+- 単なる`<a href>`ではダメなのだ。
+- そして、先に作ったbuttonクラスをここに流用してあげると、
+- CSSは同じデザインの送信ボタンが出来上がる。
+- `<button class="button" type="submit">Submit</button>`
+- 少しだけ色の調整などをつけるが、一旦これでOK
+
+***一旦ここでコミットhtmlの実装はここまで***
+***2023/10/22***
+
+- 続いてCSSを当てていきたいのだが、、、、
+- まずはselectとinputタグにクラス名を定義していく。
+- index.htmlのselectとinputタグにクラス名を定義していく。
+- labelタグのinputのほうは、labelタグにクラス名をつけておく。
+- そうすれば、labelタグのほうが親要素となるので
+- Detailに関しては、textareaのほうにクラスを定義している。
+- 以上、5つのContactセクションにおいて、クラスの定義が完了
+    - `<select class="select" id="menu">`
+    - `<input class="input" type="text" id="name">`
+    - `<input class="input" type="email" id="email">`
+    - `<label class="radio">`
+    - `<textarea class="textarea" id="detail" cols="30" rows="10"></textarea>`
+- ここからCSSスタイルを実装していく。
+
+
+### ***<font color="SteelBlue">【Contactセクション】のコーディング〜CSS〜</font>***
+
+- まずはselectのCSSからポイントは以下の通り。
+- `mini-width: 500px;`は横幅を最低でも500px保ってね。というプロパティ
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/d8769f37-bf3f-f0ac-f609-4327e7f65a57.jpeg" alt="現在select横幅画像" width=50% height=50%>
+
+- これが以下のように幅を変化させることができる。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/22a7fd9f-3f06-25c0-b0ae-54f208948acf.jpeg" alt="横幅指定後の画像" width=50% height=50%>
+
+- たぶん、テキストの長さに応じたwidthになるのだが、
+- こうやって横幅を、長くしたり短くしたりできるのだ。
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/699193c9-22a1-7c32-a347-1b27933f13eb.jpeg" alt="inputにCSSを適用後の画像" width=50% height=50%>
+
+- inputタグを使用しているNameとEmailにもCSSをあてる
+- まったく同じ内容になってしまったが、まぁいいだろう。
+- ragioクラスのCSSは、横幅詰まってるくらいなので、margin幅をつけてあげる。
+- textareaクラスのCSSもinputと同じでいいだろう。
+- ただ、高さの調整を最低でも100pxにしたいので、以下のプロパティを追加してあげる
+- `min-height: 100px;`
+
+
+<br>
+
+***入力フォームにカーソルを向けた時マウスポインターを指マークに変える***
+
+
+```diff_css
+/*
+Base style 
+*/
+body {
+  font-family: 'Noto Sans JP', "Helvetica Neue", "Helvetica", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Arial", "Yu Gothic", "Meiryo", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #333;
+}
++ label, select, input, textarea, button {
++    cursor: pointer;
++ }
+```
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/3dab1319-cb5c-1023-f53f-557d77a6d9dc.jpeg" alt="指マークにのイメージ画像" width=50% height=50%>
+
+- このように`cursor: pointer;`とすると、
+- 入力フォームにカーソルを向けた時マウスポインターを指マークに変えることができる。
+
+:::note warn
+なお、指定するのは、`.class名`ではなく、タグである点に注意
+そのため、クラス名の左側に`.`ドットが付いていないのだ。
+CSSを当てる対象をクラス名にする時は`.`から始める。
+対象がhtmlタグだった場合は、`.`はつけない。
+:::
+
+<br>
+
+***フォームのテーブル全体にCSSを当てる***
+- 現在、Contactフォーム全体が左側に寄っていたりする。
+- フォーム全体に対して、CSSを当てるために、
+- `.form`と`.form-table`に対してCSSを実装していく。
+- `.form`は一旦、不要なのでコメントアウトしておく
+- `/* .form {} */`
+
+```css
+.form-table {
+  margin: 0 auto;
+}
+```
+- ここ重要
+
+:::note info
+- `margin: 0 auto;`とは、、、
+- ブロックレベル要素のタグに対してこのように指定すると、、、、
+- marginの上下は0に指定して
+- 左右を`auto`と指定してあげると、、、
+- `中央寄せ`とすることができる。これ便利❗️
+:::
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/28b05e84-7ea9-6437-2e2b-62187111a07a.jpeg" alt="ブロック要素全体が左側によってしまっている画像" width=50% height=50%>
+
+これが、こうなる❗️
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/7cadafa9-0f85-2b5e-a0af-f12d7b8f9d91.jpeg" alt="中央寄せにいっぺんに出来た瞬間の画像" width=50% height=50%>
+
+- その他、`.form-table th`と`.form-table td`とクラスに対して、
+- paddingやtext-alignの微調整を加えてあげる
+- 次に、`submit`ボタンだけ左寄せのままになっている。
+- まだこのbuttonは、宙ぶらりんになってしまっている。
+- 以前、`Blog page`セクションで実装したボタンには、`section-button`というクラスが定義されている
+- だが、今回のbuttonはちょっとクラス名的に違う。
+- なぜなら、前回のボタンはアンカーリンクのボタンであるのに対して、
+- 今回のボタンはフォームのsubmitボタンである。
+- そのため、ここでは新しくクラス名`form-button`クラス名を定義してあげる。
+- `<div>`タグを使い、余計なhtmlの見た目を変えないようにしてあげながら、クラス名を定義する
+
+```diff_html
++     <div class="form-button">
+        <button class="button" type="submit">Submit</button>
++     </div>
+```
+- これでクラス名が定義できたので、
+- ここにCSSを当てていく。
+
+```css
+.form-button {
+  margin: 40px;
+  text-align: center;
+}
+```
+
+:::note info
+- VScodeのCSSで`margin: 40px;`とコードを書く際は、、、
+- `m40`と打つだけで予測変換してくれるよ！
+:::
+
+
+- これでsubmitボタンも中央寄せできた。
+- あと、ボタンに何か余計なスタイルが当たってしまっているので、微調整していく。
+- デベロッパーツールでCSSを確認していく。
+- うまくChromeのデベロッパーツールを活用しよう！
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/7529265f-585e-3351-2605-993294431c85.jpeg" alt="デベロッパーツール活用例イメージ" width=50% height=50%>
+
+- 画像のように一時的なスタイルとか当てることができるよ！
+
+```css
+button {
+  border: 0;
+}
+```
+- 今回は、ボタンのタグに勝手にスタイルが当たっているため、
+- ベーススタイルのbuttonタグに対して、別途`border: 0;`を適用する。
+- これで、余計なボーダー線が消え、ボタンのスタイルを統一することができた。
+
+***最後にボタンの色を変える***
+
+- ボタンの色、何色だっけ？と思った際は、
+- 見本サイトからデベロッパーツールを活用しよう！
+- 
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/aaf51bb0-847f-5742-161e-d46d1d0dd782.jpeg" alt="デベロッパーツールで使用されている色を確認しているイメージ画像" width=50% height=50%>
+
+- そのまま`.form-button`にCSSを当ててもよさそうに思えるが、
+- 今回は汎用性を持たせるため。
+- 別バージョンのボタンクラスを定義し、色違いのボタンのCSSを定義してあげよう。
+- クラス名を変えたので、htmlのクラス名を修正
+
+
+```diff_css
+  .button:hover {
+   box-shadow: 0 0 0
+   }
++ .button.button-submission {
++   color: #92d3ca;
++  }
+```
+
+```diff_html
+      <div class="form-button">
++       <button class="button button-submission" type="submit">Submit</button>
+      </div>
+```
+
+- なお、`submission`は`提出`という意味
+- これで、ボタンの色が変わる。
+
+:::note info
+ポイントは、他のスタイルを継承しつつ、ボタンの色だけを変えたということ❗️
+:::
 
 
 
@@ -1591,16 +1817,29 @@ button
 
 
 
+
+
+
+
+
+
+
+### ***✅つぎはここから （動画 1時間14分28秒〜）***
 
 
 <br><br>
 <br><br>
 <br><br>
+
+
 
 # よく使うhtmlタグ
 
 `<img src="" alt="" width=50% height=50%>`
-`<img src="" alt="" width=50%>`
-`<img src="" alt="" width=50%>`
+`<img src="" alt="" width=50% height=50%>`
+`<img src="" alt="" width=50% height=50%>`
+
+
+
 
 
