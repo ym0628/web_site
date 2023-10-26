@@ -1809,28 +1809,71 @@ button {
 ポイントは、他のスタイルを継承しつつ、ボタンの色だけを変えたということ❗️
 :::
 
+<br>
+
+### ***<font color="SteelBlue">【Works】のコーディング〜html〜</font>***
+
+- 見出しがないので、`<section>`タグは使えない。
+- ではどうするか？
+- `<aside>`タグというものを使用する
+- このタグは、`<section>`タグと似たような振る舞いをするが、
+- `<section>`のようなメインタグの補完をするような役割のタグである。
+- たとえば、2カラムのサイトの右側のTwitterとかがあるようなエリアに使われることが多い
+- footer近くの、ちょい足しゾーンみたいなところ。
+- あくまでサブ的な要素を囲むタグと覚えておく。
+- ひとまずこんな感じでOK
+
+```diff_html
+      </div>
+    </form>
+  </section>
+
++ <aside class="works">
++   <img src="https://dummyimage.com/150x80/787878/fff" alt="logo">
++   <img src="https://dummyimage.com/150x80/787878/fff" alt="logo">
++   <img src="https://dummyimage.com/150x80/787878/fff" alt="logo">
++   <img src="https://dummyimage.com/150x80/787878/fff" alt="logo">
++   <img src="https://dummyimage.com/150x80/787878/fff" alt="logo">
++ </aside>
+
+  <script src="./assets/js/app.js"></script>
+</body>
+</html>
+```
+
+***2023/10/26***
+
+### ***<font color="SteelBlue">【Works】のコーディング〜CSS〜</font>***
+
+```CSS
+.works > img {
+  margin: 0 15px;
+}
+```
+- 上記のようにすると、`works`タグの子要素であるimgタグを指定する、、、
+- みたいな感じに出来るんだと思う。。。
+- 子要素である画像の左右に15pxの marginを空ける
+- ここは一瞬で出来ましたね。
+- 完成イメージはこれ。
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/2e992ce3-f4e7-a4a0-06a7-5107fcfb42ea.png" alt="Worksの完成イメージ" width=50% height=50%>
+
+- ここで`Works`の実装は終了。
+- コミットしておきます。
 
 
 
 
 
 
+<br>
 
-
-
-
-
-
-
-
-
-### ***✅つぎはここから （動画 1時間14分28秒〜）***
-
+### ***✅つぎはここから （動画 1時間17分25秒〜）***
 
 <br><br>
 <br><br>
 <br><br>
-
 
 
 # よく使うhtmlタグ
@@ -1838,8 +1881,4 @@ button {
 `<img src="" alt="" width=50% height=50%>`
 `<img src="" alt="" width=50% height=50%>`
 `<img src="" alt="" width=50% height=50%>`
-
-
-
-
 
