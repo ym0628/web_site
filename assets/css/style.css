@@ -233,3 +233,47 @@ works
 .works > img {
   margin: 0 15px;
 }
+
+/*
+footer
+*/
+.footer {
+  background-color: #333;
+  color: #fff;
+}
+.footer-map {
+  margin: 0;
+  padding: 40px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.footer-map > iframe {
+  width: 60%;
+}
+.footer-mapinfo {
+  width: 40%;
+  padding: 15px;
+}
+.footer-maplogo {
+  font-size: 25px;
+  font-weight: bold;
+}
+.footer-maplogo > svg {
+  margin-right: 10px;
+  fill: transparent;
+}
+.footer-mapadress {
+  font-style: normal;
+}
+.footer-mapadress > a {
+  color: #fff;
+}
+.footer-line {
+  border-color: #444;
+}
+.footer-copy {
+  display: block;
+  text-align: center;
+  padding: 10px;
+}
