@@ -26,6 +26,8 @@ https://qiita.com/twipg/items/d8043cd4681a2780c160
 
 https://www.webcreatorbox.com/tech/css-flexbox-cheat-sheet
 
+https://worldvectorlogo.com/ja/logo/svg
+
 
 ## <font color="Teal">制作ログ</font>
 以下に制作の記録をつけていく。
@@ -1862,18 +1864,265 @@ button {
 - ここで`Works`の実装は終了。
 - コミットしておきます。
 
+***2023/10/28***
+
+### ***<font color="SteelBlue">【Footer】のコーディング〜html〜</font>***
+
+- フッターなので、ではなく`footer`タグを使用する
+- ただし、bodyタグ内に実装するのは変わらないので注意
+- 今回は、フッターにGoogleマップの地図を埋め込む
+- 今回は、東京駅の場所のマップを埋め込む
+- 東京駅Googleマップ　で検索
+- 共有アイコン
+- iframeというhtmlタグをコピペする。
 
 
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/9b8046e8-123a-ff06-1a4a-8565bfe5ffe9.jpeg" alt="東京駅のGoogleマップ埋め込みまでの手順イメージ画像" width=50% height=50%>
 
-
+- `<iframe>`タグは、外部のWeb情報を埋め込むタグである。
+- 埋め込んだGoogleマップの表示を、デベロッパーツールで見てみるとわかるが、、、
+- iframeの情報の中には、さらに<DOCTYPE>から始まるhtmlサイトが表示される。
+- つまり外部WEBサイトのページを持ってくるという役割を持つのがiframeなのである
 
 <br>
 
-### ***✅つぎはここから （動画 1時間17分25秒〜）***
+- ここで、iframeを囲むタグとして、のちにCSSを当てるためのクラスを与えたい。
+- ここでは`<figure>`タグが使える
+- `figure.footer-map`と打つだけで、
+- `<figure class="footer-map"></figure>`が自動的にコードを記述してくれる。
+- VScode便利❗️
+- さらに、`<figcaption class="footer-mapinfo">`
+- と、`<div class="footer-maplogo">`
+- を付け加える。
+- 画像と、その説明と、挿入するロゴ、
+- それぞれのクラスを割り当てるタグを用意した。
 
-<br><br>
-<br><br>
-<br><br>
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/7b4effff-e0ac-f027-79b3-8cb48c6e2fca.jpeg" alt="共有リンクをコピーする画像" width=50% height=50%>
+
+- `adress`タグで住所情報を記述する。
+- `target="_blank"`を使うと、別タブでページを開かせることができる。
+- `<br>`タグには、閉じタグをつけても付けなくても良い。
+
+```html
+<adress class="footer-mapadress">
+  〒100-0005 東京都千代田区丸の内１丁目 <br>
+  <a href="https://maps.app.goo.gl/jfcEM5LbdayJ1MXHA" target="_blank">Google Map</a>
+</adress>
+```
+
+- 続いて、見本サイトにある`うっすらとしたライン`を作りたい
+- `<hr>`タグというもので、線をhtmlで描くことができる。
+- 区切り線　とも言う。
+- hrには閉じtagはつけても付けなくても良い。
+- つける場合は`</hr>`のような閉じタグは付けてはダメ。崩れる。
+- `<hr/>`閉じタグを付けたい場合はこんな感じにする。
+- 試しに、下のように、Qiita記事投稿時にも使える。↓↓↓↓
+
+<hr/>
+<hr/>
+<hr/>
+
+- コピーライトマークは、Macだと、かな入力でcを打って変換すると候補に出てくる。
+- （※2023/10/28、MacOS 12.3.1の場合）
+- ただ、全角かな入力で変換したCだと、エディターに入力した際によく全角文字である注意みたいな表示が出てしまう、、、
+- よく分からんが、Google検索でコピペしてきた`©︎`だと、VScodeでは注意の表示がでないので、こっちのほうが無難なのかなぁ、、、？
+- 完成したhtmlコードは以下の通り。
+
+```html:index.html
+  <class="footer">
+    <figure class="footer-map">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.8278537074325!2d139.76454987567135!3d35.68124052997377!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188bfbd89f700b%3A0x277c49ba34ed38!2z5p2x5Lqs6aeF!5e0!3m2!1sja!2sjp!4v1698454061751!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <figcaption class="footer-mapinfo">
+        <div class="footer-maplogo">
+          My site
+        </div>
+        <adress class="footer-mapadress">
+          〒100-0005 東京都千代田区丸の内１丁目 <br>
+          <a href="https://maps.app.goo.gl/jfcEM5LbdayJ1MXHA" target="_blank">Google Map</a>
+        </adress>
+      </figcaption>
+    </figure>
+    <hr class="footer-line">
+    <small class="footer-copy">Copyright ©My site</small>
+  </footer>
+```
+- ここでコミットしておきます。
+
+
+
+### ***<font color="SteelBlue">【Footer】のコーディング〜CSS〜</font>***
+
+- とりあえず、いつもの要領でCSSクラスを定義していく。
+
+```css
+/*
+footer
+*/
+.footer {}
+.footer-map {}
+.footer-map > iframe {}
+.footer-mapinfo
+.footer-maplogo {}
+.footer-mapadress {}
+.footer-mapadress > a {}
+.footer-line {}
+.footer-copy {}
+```
+
+
+```css
+.footer-map {
+  margin: 0;   /* 余分なマージンがマップ全体にかかっているので無くす */
+  padding: 40px 15px; /* その上で、paddingを左記のようにちょっと空ける */
+  display: flex;  /* マップとテキストを横並びにする */
+  align-items: center;  /* 縦の中央寄せ */
+  justify-content: center;  /* マップ全体を横の中央寄せ */
+}
+```
+
+```css
+.footer-map > iframe {
+  width: 60%;   /* 画像の幅を全体の60％を占めるように */
+}
+.footer-mapinfo {
+  width: 40%;   /* 画像の幅を全体の40％を占めるように これで全体が100%になるように */
+  padding: 15px;  /* テキストの外枠に余白を少し与える */
+}
+```
+
+
+
+:::note info
+***【まめ知識】***
+map周りのCSSをデベロッパーツールで確認すると、
+`box-sizing: border-box;`が適用されているのがわかる。
+これは、幅%とpxの指定が複合している場合、幅の%の中に、
+`px`の`padding`が内包されるように自動調整される❗️
+ここの`border-box`の適用を外してしまうと、計算が面倒になる。
+つまり、`box-sixing: border-box;`はへたにいじらない方が良い。
+
+※この仕組みは最初に導入した`sanitize.css`ライブラリの機能だ❗️
+:::
+
+
+***ロゴ画像の挿入***
+- ロゴ画像を入れる必要があるのだが、
+- 今回は勉強のために、SVG形式のロゴを導入してみる。
+
+
+<a href"https://worldvectorlogo.com/ja/logo/svg">Worldvectorlogo</a>
+
+https://worldvectorlogo.com/ja/logo/svg
+
+- フリー画像なので、使用してOK
+
+
+
+
+<details>
+  <summary>画像ファイル形式の特徴・メリット</summary>
+
+```css
+<!-- jpg(jpeg)これは細かい色の表現をたくさん使う時に最適 -->
+<!-- png(png-8, png-24, png-32)数字は、使っている色の数、細かい色の表現は苦手。jpegよりも軽いのがメリット。png24と32は透過できる（背景白じゃなくて背景なしのロゴ画像とかに最適）が、ちょっと容量大きめ-->
+<!-- git(背景透過$アニメーションが使えるのがメリットだが、容量大きくなりがち)最近は使わず、javascriptとかでアニメーションを表現するほうが流行。 -->
+
+<!-- svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2487" height="2500" viewBox="0 0 211.185 212.275"><path d="M30.46 ....676 63.108z" fill="#cd3529"/></svg>
+
+<svg width="", height="", viewBox="">
+  <path d="89478347", fill="#fff"></path>
+  <g>
+    <path d="89478347", fill="#fff"></path>
+    <path d="89478347", fill="#fff"></path>
+    <path d="89478347", fill="#fff"></path>
+  </g>
+  <title>ロゴ画像</title>
+</svg>
+
+<!-- svgとは、htmlタグである。 -->
+<!-- ベクター5と呼ばれる、伸縮しても画質が変わらないIllustratorとかで作った画像とかアイコンがあるのだが、 -->
+<!-- そのベクターファイルをhtmlに変換したものをsvgというのだ! -->
+<!-- 特徴はhtmlという文字情報であるため圧倒的に軽量化できているということがメリット！ -->
+<!-- つまり、画像を最速で表示させるのであればsvgが最適なのである！ -->
+<!-- また、同じ画像を拡大・縮小していろんなシチュエーションで使いたい時にも最適だ！ -->
+<!-- さらに、javascriptでpathをいじれるので、アニメーションも作れる！ -->
+<!-- デメリットとしては、ソースコードが長くなって、可読性が落ちること。使い過ぎに注意。 -->
+<!-- 色の表現が苦手なので、写真みたいな多彩な色表現には向かない。 -->
+<!-- なお、pathには、線の情報が入っている。 -->
+<!-- <g>タグは、グルーピングの略。pathの情報がたくさんある場合に、グルーピングして可読性を高めることができる。 -->
+<!-- <title>タグは、htmlでいうtitleとは違い、alt属性に類似する役割。画像の代替テキストを入れる。 -->
+```
+
+</details>
+
+
+- DLしてきたsvgのソースコードを、対象のhtmlタグに貼り付ける。
+- `footer-maplogo`にブッ込む
+- さらに、横幅、縦幅のデフォルト指定がデカすぎるので、80くらいに指定する。
+- また、`fill= #fff`という背景色を白くするコードが入っていたら、消せば背景白を無しにできる。
+
+```html:html
+        <div class="footer-maplogo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 211.185 212.275"><path d="M30.46 ...省略..108z" fill="#cd3529"/></svg>
+          My site
+        </div>
+```
+
+```css:css
+.footer-maplogo {
+  font-size: 25px;
+  font-weight: bold;
+}
+.footer-maplogo > svg {
+  margin-right: 10px;
+  fill: transparent; /* 背景を透過させる */
+}
+```
+
+```css
+.footer-mapadress {
+  font-style: normal;
+  /* adressタグは、デフォルトでイタリックスタイルが適用されてしまうので除外 */
+}
+.footer-mapadress > a {
+  color: #fff;
+}
+.footer-line {
+  border-color: #444;
+}
+.footer-copy {
+  display: block; /* smallタグはインライン要素のため、ブロック要素にしてからセンター寄せ */
+  text-align: center;
+  padding: 10px;
+}
+```
+
+<hr><hr><hr>
+
+
+### **<font color="SteelBlue"> 「Hero」のコーディング & ホスティング </font>**
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br><br>
+<hr><hr><hr>
+
+### ***✅つぎはここから （動画 1時間38分00秒〜）***
+
+<hr><hr><hr>
+<br><br><br>
+
 
 
 # よく使うhtmlタグ
