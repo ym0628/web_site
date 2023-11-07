@@ -28,6 +28,14 @@ https://www.webcreatorbox.com/tech/css-flexbox-cheat-sheet
 
 https://worldvectorlogo.com/ja/logo/svg
 
+https://www.pexels.com/videos/
+
+https://vincentgarreau.com/particles.js/
+
+https://github.com/VincentGarreau/particles.js/
+
+https://www.netlify.com/
+
 
 ## <font color="Teal">制作ログ</font>
 以下に制作の記録をつけていく。
@@ -287,7 +295,6 @@ $ git pull origin main
 
 ```js:app.js
 //まだ何も記述しない。
-
 ```
 
 - 次に、`style.css`と`app.js`読み込む設定を`index.html`に記述する。
@@ -2102,8 +2109,535 @@ https://worldvectorlogo.com/ja/logo/svg
 <hr><hr><hr>
 
 
-### **<font color="SteelBlue"> 「Hero」のコーディング & ホスティング </font>**
+### **<font color="SteelBlue">Heroのコーディング&ホスティング（html） </font>**
 
+- Hero画像とは、Webサイトの一番大きな写真を挿入する部分のことを言います。
+- 背景の動く背景を取得したい。
+- 「video free」などで検索
+- 今回はこちらを使用
+- https://www.pexels.com/videos/
+- 4MB前後なら許容範囲か？
+- 今回は7MBのショート動画をDLした。
+- 10MBを超えるとけっこうしんどいので、その辺がデッドラインかと思う。
+- htmlの実装場所はbodyタグ内の一番上に記述していく。
+
+
+:::note warn
+videoタグの中に直接srcでvideoのパスを指定せず、
+あえてsourceタグを新たに用意する意味は、、、、
+sourceタグにすることで、複数の画像や動画ファイルをまとめて置くことができるから。
+グルーピングすることで可読性が上がるのはもちろんのこと、
+ブラウザの種類によっては、`mp4`形式のファイルが読み込めないことがある。
+その際の回避方法として、同じファイルの形式違い（拡張子違い）の動画を用意しておくことで、
+広いユーザーに対応する親切なサイト構築をすることができる。
+:::
+
+- また、videoタグはこれだけだと、動画は動かない。
+- `autoplay`と`loop`属性をつける、これマスト！
+- 他にも`muted`属性は音が出ないようにする属性！
+- `preload`属性は、htmlが読み込まれたら即座に、mp4を読み込むようにする属性。
+- これはブラウザになる早で動画を読み込んでね、とコンピューターに伝える意味がある。
+- ここまで実装すると、以下のような感じ。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/b2adfa22-2749-47b4-ee25-2b8949389cea.jpeg" alt="Hero実装の途中画像" width=50% height=50%>
+
+- ここまでのコードはこんな感じ。
+
+```html
+<body>
+
+  <div class="hero">
+    <strong>Hello World</strong>
+    <div class="hero-particles"></div>
+    <video autoplay loop muted preload>
+      <source src="assets/videos/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+
+...以下省略
+```
+
+- 一旦、ここでコミットしておきます。
+
+
+
+### **<font color="SteelBlue">Heroのコーディング&ホスティング（CSS） </font>**
+
+- まだ見た目がよろしくないので、次にCSSスタイルを実装していく。
+- CSSの実装場所は`section`スタイルと`about`スタイルの間あたりに実装していく。
+- `hero`クラスにまずは横幅と縦幅を指定するのだが、、、ここでは、
+- `vw`と`vh`というサイズを指定する。
+- `vw`は`viewport width`ウィンドウの横幅を指定する。
+- `vh`は`viewport height`の略称で、ウィンドウの縦幅を指定する。
+- デベロッパーツールで確認すると、こんな感じに横幅・縦幅が指定されているのがわかる。
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/78056e69-316c-4820-79f2-d77dcc33f03f.jpeg" alt="vwとvhの指定イメージ" width=50% height=50%>
+
+
+
+:::note alert
+- ここから結構難しいので、しっかり一つずつ理解していく！
+- 動画`1時間42分50秒`〜`1時間46分45秒`までが難しい！
+- 
+:::
+
+- 復習
+- リンクタグのスタイルに`position: relative;`（英語の意味は`相対的`なという形容詞）
+- ラベルタグのスタイルに`position: absolute;`（英語の意味は`絶対的`なという形容詞）
+- と、入れてあげると、以下のようになる。
+- 画像のなかにテキストが入り込んで、ラベルが出来上がる。
+
+```css
+.hero {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+.hero > strong {
+  position: absolute;
+}
+```
+
+- 画像で確認すると、こんな感じ。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/fdae328e-bb81-4dfb-7f78-5cf6ebe52208.jpeg" alt="relativeとabsoluteの説明画像" width=50% height=50%>
+
+:::note info
+- きちんと言語化すると、、
+- `relative`の子要素の中で、`absolute`は自由に行き来できるようになる。
+- つまりここでは、`.hero`クラスのCSSに`relative`の小要素である`.hero > strong`クラスに`absolute`をつけたことで、`.hero`の画像の中に、`「Hello World」`という文字が入り込むことができるようになる。
+- 例えば画像の中で、センター寄せにしたり、といった調整が可能になるということだ。
+:::
+
+
+- 続いて、「Hello World」の文字を画像の中央に寄せたいのだが、、、、
+- ここが難しい、、、、
+
+```diff_css
+.hero {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+.hero > strong {
+  position: absolute;
++  top: 50%;
++  left: 50%;
+}
+```
+- これでうまくいきそうに見えるが、、、、
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/de86aaca-e69e-cac7-4ee8-494559076a04.jpeg" alt="top50%とleft50%の指定だけでは不十分の画像" width=50% height=50%>
+
+- `transform: translate(-50%, -50%);`というテクニックを使う。
+
+```diff_css
+.hero > strong {
+  position: absolute;
+  top: 50%;
+  left: 50%;
++ transform: translate(-50%, -50%);
+}
+```
+- これはtopとleftの50%をやった上で、
+- `tranform:、、、-50%, -50%`とすることで
+- ちょうど、画面の真ん中に来る、、、っていうテクニックらしい。
+- だけども、、、、
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/ec1b2200-6854-7539-3543-f023b81aca14.jpeg" alt="transformを使った結果の画像" width=50% height=50%>
+
+- 確かに、画面の真ん中に配置することはできたかなぁ。
+- でも、元の画像の要素が左に寄ってしまっているので、、、
+- まだ、ちょっと分かりづらい。ので、、、
+- `font-size: 120px;`を付け足します。
+
+:::note info
+`font-size: 120px;`は、`fz120`と打つだけで、
+自動的に予測変換してくれるよ！VScode最高！
+:::
+
+- その他
+- strongタグはインライン要素なので、横幅が狭い。ので
+- `display: block;`でブロック要素にしてあげる。
+- なおかつ`width: 100%;`にすることで1行でテキストが表示されるようにする。
+- さらに`text-align: center;`をつけて画面の中央寄せにする。
+- この辺は見た目では俺は変わらなかったけど、まぁ一応やっておくか。
+- `.hero > strong`のCSSスタイルはこれで一通り出来上がり。
+
+
+```css
+.hero > strong {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px;
+  color: #fff;
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+```
+
+***「Hero画像の幅が足りていない」への対応***
+
+- 続いて、Hero画像の幅が足りてなくて、右側に空白ができてしまっている。
+- これを修正していきたい。
+- まずは以下のように、子要素のクラスをCSSで定義してあげる。
+- `.hero > video {}`
+- この子要素にも`position: absolute;`を設定してあげる。
+
+しかし、この段階で、、、`Hello World`が消えてしまった💦
+おそらく、画像の裏側に隠れてしまったのかなぁ？
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/cab38e3b-dd49-852a-745e-9e8e33855d46.jpeg" alt="hello worldが消えてしまった画像" width=50% height=50%>
+
+
+- いったん、テキストが隠れてしまったことは置いておいて、、、、
+- 画像をいい感じに画面の中央にフィットさせるには、どうするか？？？
+- 以下のようにやってみる。
+
+```css
+.hero > video {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+```
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/573eba22-9881-8fed-e575-1ca1ba2b9458.jpeg" alt="横幅、縦幅100%にしてみた結果の画像" width=50% height=50%>
+
+:::note warn
+- 一応、これでもいいのだけれど、
+- 元々の画像のサイズやアスペクト比によっては、`width: 100%`と`height: 100%`うまく画面全体にフィットしない可能性がある。
+- この画像においても、縦は足りてるけど、横幅が足りてない状況で、大きく空白ができてしまっている。
+- なので、単純に横幅・縦幅100%にするのではなく、、、、こんな感じにしてみる。
+:::
+
+```diff_css
+.hero > video {
+    position: absolute;
++   width: auto;
++   height: 105%;
+}
+```
+
+- ただ、今回採用した画像は、`width: 100%` `height: 100%;`でいい感じになったので、これでよしとする。
+- また、videoの縦幅が親クラスであるheroタグのサイズからはみ出してしまっている場合は、
+- `overflow: hidden;`を使うと、はみ出した部分をカットしてくれる。
+
+```diff_css
+.hero {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
++   overflow: hidden;
+}
+```
+
+***`Hello World`が消えてしまう理由と対処法***
+- 理由は、`.hero > strong`と`.hero > video`、
+- 両方に`position: absolute;`が適用されているから。
+- htmlで指定したタグは、上と下の場合、下に定義した方が優先してCSSが適用される？ため、
+- 結果、画像がオモテ面に表示され、テキストは背面に隠れてしまうという現象が起きる。
+- そんな時はCSSで`z-index: 数字`を使用する。
+- 特徴としては、「数字が大きい方が上に乗っかって重なる」という性質である。
+- よって、表に表示させたいテキスト「hello world」がある`.hero > strong`クラスのCSSに`z-index: 2;`と指定してあげて、背面にしたいクラス`.hero > video`に対して、`z-index: 1;`と指定してあげる。（逆はダメだよ！）
+- とりあえず一旦、ここまででコミットする。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/6a8b009d-4e37-55f5-b9ff-5de13ea15361.jpeg" alt="Heroの仮完成イメージ画像" width=50% height=50%>
+
+<hr>
+
+
+### **<font color="SteelBlue">HeroのCSS〜`particle javascript`の実装〜</font>**
+
+- Heroの画像内で動くアニメーション。
+- ゼロイチで作ろうとすると、大変なのでライブラリを使いたい。
+- 「`particle js`」で検索
+- https://vincentgarreau.com/particles.js/
+- https://github.com/VincentGarreau/particles.js/
+- できるだけ、こういうプラグインを使って工数を削減しよう。
+- また、fork数とか、star数を見て、信頼できるプラグインなのかを判断しよう。
+- 使い方はライブラリのGitHubのREADME.mdを見て確認する。
+- まずはhtmlにidを割り振る。
+
+```diff_html
+  <div class="hero">
+    <strong>Hello World</strong>
++   <div class="hero-particles" id="particles-js"></div>
+    <video autoplay loop muted preload>
+      <source src="assets/videos/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+```
+
+- jabascriptのライブラリを適用させる方法は、いろいろある。
+- 今回は、ソースコードを拝借し、それを自身のjsディレクトリ配下に設置し、htmlでそのソースコードを読み込むという方法をとっていく。
+- まず、particles-jsのソースコード設置するjsファイルを新規作成する。
+- `touch assets/js/particles.min.js`
+- ソースはライブラリ公式からパクってくる。
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/e01e79f4-007c-d0f0-343d-26145b3cd210.jpeg" alt="ここのファイルを開くとソースコードが見れる" width=50% height=50%>
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/b0672569-d9c4-fcda-830b-bddb38a37068.jpeg" alt="拝借するソースコード画面" width=50% height=50%>
+
+
+```javascript:assets/js/particles.min.js
+/**
+ * Minified by jsDelivr using UglifyJS v3.4.4.
+ * Original file: /npm/particles.js@2.0.0/particles.js
+ * 
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+var pJS=function(e,t){var a=document.querySelector("#"+e+" > .particles-js-canvas-el");this.pJS={canvas:....
+（以下省略）
+```
+- 続いて、設置したjsファイルを読み込む宣言を、htmlに記述する。
+
+```diff_html
++   <script src="./assets/js/particles.min.js"></script>
+    <script src="./assets/js/app.js"></script>
+</body>
+</html>
+```
+:::note alert
+ルートディレクトリを指し示す`./`を記述しないと、ホスティング（デプロイ）した時にエラーになるので注意。
+なお、javascriptのエラーが起きているかどうかは、`Chrome`のデベロッパーツールの`console`タブで確認できる。
+エラーが起きた時にはまずデベロッパーツールを使うように癖をつけよう！
+:::
+
+
+- まだまだこれだけでは終わらない、、、
+- 次に、再びライブラリのREADME.mdを確認すると、、、
+- `app.js`にこれを記述してくださいと、あるので、その通りに実装する。
+- まだまっさらな`app.js`にREADME.mdに記載のソースコードをコピペする。
+
+```javascript:assets/js/app.js
+/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
+particlesJS.load('particles-js', 'particles.json', function() {
+  console.log('callback - particles.js config loaded');
+});
+```
+:::note warn
+公式のREADME.mdでは、`assets/particles.json`とされているが、今回の自分の環境では、ホスティング（デプロイ）した時に、エラーになってしまう。
+`particles.json`だけの記載にすると、うまくいく。
+:::
+
+
+- このコードでは、`particles-js`という`id`が振ってあるクラスに対して、`assets/particles.json`というファイルのコードを適用させるよ
+- という意味の内容になっている。
+- この、`assets/particles.json`の内容も、公式README.mdに掲載されているので、そのまま貼り付ければ良い。
+- まずは、また新しいファイルをjsディレクトリの配下に作成。
+- `touch assets/js/particles.json`
+- このファイルに、README.mdの掲載内容をコピペする。
+- 
+
+```json:./assets/js/particles.json
+{
+  "particles": {
+    "number": {
+      "value": 80,
+      "density": {
+        "enable": true,
+        "value_area": 800
+      }
+    },
+    "color": {
+      "value": "#ffffff"
+    },
+    "shape": {
+      "type": "circle",
+      "stroke": {
+        "width": 0,
+        "color": "#000000"
+      },
+      "polygon": {
+        "nb_sides": 5
+      },
+      "image": {
+        "src": "img/github.svg",
+        "width": 100,
+        "height": 100
+      }
+    },
+    "opacity": {
+      "value": 0.5,
+      "random": false,
+      "anim": {
+        "enable": false,
+        "speed": 1,
+        "opacity_min": 0.1,
+        "sync": false
+      }
+    },
+    "size": {
+      "value": 10,
+      "random": true,
+      "anim": {
+        "enable": false,
+        "speed": 80,
+        "size_min": 0.1,
+        "sync": false
+      }
+    },
+    "line_linked": {
+      "enable": true,
+      "distance": 300,
+      "color": "#ffffff",
+      "opacity": 0.4,
+      "width": 2
+    },
+    "move": {
+      "enable": true,
+      "speed": 12,
+      "direction": "none",
+      "random": false,
+      "straight": false,
+      "out_mode": "out",
+      "bounce": false,
+      "attract": {
+        "enable": false,
+        "rotateX": 600,
+        "rotateY": 1200
+      }
+    }
+  },
+  "interactivity": {
+    "detect_on": "canvas",
+    "events": {
+      "onhover": {
+        "enable": false,
+        "mode": "repulse"
+      },
+      "onclick": {
+        "enable": true,
+        "mode": "push"
+      },
+      "resize": true
+    },
+    "modes": {
+      "grab": {
+        "distance": 800,
+        "line_linked": {
+          "opacity": 1
+        }
+      },
+      "bubble": {
+        "distance": 800,
+        "size": 80,
+        "duration": 2,
+        "opacity": 0.8,
+        "speed": 3
+      },
+      "repulse": {
+        "distance": 400,
+        "duration": 0.4
+      },
+      "push": {
+        "particles_nb": 4
+      },
+      "remove": {
+        "particles_nb": 2
+      }
+    }
+  },
+  "retina_detect": true
+}
+```
+
+- ここまでやったらいよいよ、出来上がりか？
+- と思うが、これでもまだ、particles-jsは成功しない。
+- javascriptは、ものによるが、今回のライブラリの場合、ローカルサーバーの環境を構築しないと、動かないことがある。
+- Ruby on Railsでいうなら、`rails server`で`localhost:3000`に繋げる、みたいに、ローカルサーバーを立ち上げる必要があるようだ。
+- ホスティングと呼ぶ。
+- ローカルにデプロイするともいうのかな？
+- 今回は、めちゃ簡単にローカルサーバーの構築ができるサービスを使う。
+- https://www.netlify.com/
+- これにサインアップ（登録）してみよう。
+- 適当に登録して、、、
+- `Drop netlify`を選択し、、、、
+- 自分がローカルで作成しているディレクトリを、`ドラッグ&ドロップ`する。
+- 更新したい時は、同じように、ドラッグ&ドロップするだけ。めちゃ簡単！
+
+
+***エラーを解消する***
+- `app.js`に記述するパスが間違っていたので修正。
+
+```diff_javascript
+/* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
++ particlesJS.load('particles-js', 'assets/js/particles.json', function() {
+  console.log('callback - particles.js config loaded');
+});
+```
+- htmlの`hero-particles`にCSSが当たっていないので追記。
+- かつ、`z-index:`の順番を変更。
+- `video`が一番背面にしたいので`1`のまま。
+- 次に`articles-js`を`2`にする。
+- 一番表面に出したい`Hello World`を`3`にする。
+
+```diff_css
+.hero > strong {
+  position: absolute;
++ z-index: 3;
+  top: 50%;
+
+...
+（中略）
+...
+
+.hero-particles {
+  position: absolute;
++ z-index: 2;
++ width: 100%;
++ height: 100%;
+}
+```
+
+- これで、再度デプロイしてみる。
+- どうだ？？？
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/56d6cafa-b493-f662-7482-d8dbd49069d3.jpeg" alt="articles-jsがうまく適用できた画像" width=50% height=50%>
+
+- OK！ちゃんとjavascript動きました❗️
+- ただ、少し、アニメーションの動く数が多くて気持ち悪いので、、、
+- 微調整したい。
+- この`particles-js`は親切で、公式ページの設定メニューで視覚的に設定を変更することができる。
+- 今回は、公式ページhttps://vincentgarreau.com/particles.js/
+- の設定をそのままダウンロードする。
+- すると、ダウンロードにファイルが保存されるので、`particles.json`のソースコードを、自身の開発環境の`particles.json`にそのままコピペして上書きする。
+- すると、、、
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/56dd1eb2-40db-e06e-4829-89eeab8bdf85.jpeg" alt="出来上がりparticles-jsの完成画像" width=50% height=50%>
+
+- 出来上がり❗️❗️❗️❗️
+- ここでコミットしておく。
+- ここまでの差分。
+
+```terminal
+% git status -u
+On branch create_site
+Your branch is up to date with 'origin/create_site'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+    modified:   assets/css/style.css
+	modified:   assets/js/app.js
+	modified:   index.html
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	assets/js/particles.json
+	assets/js/particles.min.js
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
 
 
 
@@ -2118,7 +2652,7 @@ https://worldvectorlogo.com/ja/logo/svg
 <br><br><br>
 <hr><hr><hr>
 
-### ***✅つぎはここから （動画 1時間38分00秒〜）***
+### ***✅つぎはここから （動画 `1時間57分05秒`〜）***
 
 <hr><hr><hr>
 <br><br><br>
