@@ -2639,7 +2639,154 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 ```
 
+***2023/11/11***
+### **<font color="SteelBlue">Headerの実装〜html・CSS〜</font>**
 
+- メニューをクリックすると、該当のセクションに自動的に画面がスクロールしてくれる。
+- 左側にはロゴマークを置く。
+- 完成イメージはこんな感じ。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/e3244414-b710-1d37-bbce-4e30391ac360.png" alt="ヘッダーの完成イメージ" width=50% height=50%>
+
+- まずは`index.html`の、`hero`タグの下に`header`タグを置く。
+- 途中経過はこんな感じのコード。
+
+```html
+  <header class="header">
+    <h1 class="header-logo">
+      <a href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 211.185 212.275">
+          <path d="M30.46 39.371l5.3...省略...892z" fill="#fff"/>
+          <path d="M181.431 64.257c-...省略...695z" fill="#fff22d"/>
+          <path d="M46.414 32.142l4...省略...893z fill="#cd3529"/>
+          <g fill="#33a457">
+            <path d="M83.125 60.02...省略..504z"/>
+          </g>
+          <path d="M196.773 93.052c...省略...7-11z" fill="#cd3529"/>
+          <title>my_site</title>
+        </svg>
+      </a>
+    </h1>
+    <nav class="header-nav">
+      <ul class="header-navlist">
+        <li class="header-navitem">
+          <a href="#">About</a>
+        </li>
+        <li class="header-navitem">
+          <a href="#">Feature</a>
+        </li>
+        <li class="header-navitem">
+          <a href="#">Blog</a>
+        </li>
+        <li class="header-navitem">
+          <a href="#">Contact</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+```
+
+- ここまでの経過イメージはこんな感じ。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/63ad7b71-bff6-2191-06a1-93c6a5041d93.png" alt="header途中経過画像" width=50% height=50%>
+
+<hr>
+
+### **<font color="SteelBlue">Headerの実装〜CSS〜</font>**
+
+- とりあえず、いつも通り、CSSのクラスからまとめて作って下準備する。
+
+```css
+/*
+header
+*/
+.header {}
+.header-logo {}
+.header-logo > a {}
+.header-nav {}
+.header-navlist {}
+.header-navitem {}
+.header-navitem > a {}
+
+```
+- ここにスタイルを適用させていく。
+
+***まずは、大元の`header`タグにスタイルを当てていく***
+
+- `justify-content: space-between;`
+- これは、二つの要素を画面の左端と右端に寄せるプロパティである。
+- `align-items: center;`は縦の幅に対して中央寄せする。
+- `padding: 0 15px;`で左右に空白を少し開けてあげる。
+- `position: fixed;`は、relativeとは逆で、要素を固定する役割。スクロールしても、ヘッダーだけは固定され、常に画面上部に表示させるようにしたい。
+- また、他の要素に関係なく固定となるという特徴も理解しておきたい。
+- さらに、`z-index: 10;`で一番表面に要素を出す。
+- `top: 0;`と`left: 0;`は、要素の位置を指定するもの。すなわち、ヘッダーの何ふさわしく、一番上、かつ、左の位置に、header要素を持ってきて、固定し、なおかつ、表面に置いたことになる。
+- 以上、大元となる`header`タグのCSSはこんな感じになる。
+
+```css
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+}
+```
+
+***続いて、他のheaderクラスのスタイルをサクッと進める***
+
+- `.header-logo { margin: 0; }`には、余計なマージンをつけたくないので、こうした。
+- `.header-logo > a`については、アンカーリンクタグがインライン要素であるため、これを念の為、ブロック要素に変えてあげる＞＞＞`display: block;`
+- また、ヘッダーロゴにもアンカーリンクをつかテイルので、背景が透明なロゴデザインの場合、背景が青く染まってしまうことがある。その場合は、`color: transparent;`をつけることで、背景を透明に戻すことができる。
+- `.header-nav {}`はたぶん使わないのでコメントアウトしておく。
+-  `.header-navlist`には、余計なマージンをなくし、横並びにするflex、あとの二つは念の為space-betweenと center寄せにしておく。
+
+```css
+.header-navlist {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+```
+
+- `.header-navitem {}`は使わなさそうなので、コメントアウト。
+- `.header-navitem > a {}`ここには色々スタイルを当てたい。
+
+```css
+.header-navitem > a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+  transition: border-color .25s;
+}
+.header-navitem > a:hover {
+  border-bottom: 2px solid #333;
+}
+```
+
+- `padding: 10px`によって、アンカーリンクの間に程よい空白が生まれた。
+- カラーを黒にして、アンカーリンク特有の下線を消した。
+- さらに、ホバー機能を持たせた。
+- 追加で`.header-navitem > a:hover`というクラスを定義し、、、
+- ホバーした時に2pxのソリッドな下線が出現するようにした。
+- さらに！
+- この追加したホバークラスの親である`.header-navitem > a`に対して、
+- `transparent`透明な下線を設置。
+- これがホバーした時に、小クラスのボーダーが、0.25秒の絶妙なタイムラグの後に、浮かび上がるようにして、より自然な操作感を実現した。
+- 以上でヘッダーは完成！
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/c4302950-75ee-d304-7670-f32f7d01b6b8.png" alt="header完成画面" width=50% height=50%>
+
+<hr>
 
 
 
