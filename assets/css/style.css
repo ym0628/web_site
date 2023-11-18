@@ -66,8 +66,21 @@ section
   margin: 0 0 40px;
 }
 .section-button {
-  margin-top: 40px;
+  margin: 40px 0 0;
   text-align: center;
+}
+@media screen and (max-width: 768px) {
+  .section {
+    padding: 20px 10px;
+  }
+  .section-headline {
+    font-size: 30px;
+    margin: 0 0 20px;
+  }
+  .section-button {
+    margin: 20px 0 0;
+    text-align: center;
+  }
 }
 
 /*
@@ -110,6 +123,12 @@ header
 }
 .header-navitem > a:hover {
   border-bottom: 2px solid #333;
+}
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 5px 15px;
+    font-size: 13px;
+  }
 }
 
 /*
@@ -356,6 +375,16 @@ works
 .works > img {
   margin: 0 15px;
 }
+@media screen and (max-width: 768px) {
+  .works {
+    margin: 20px 0;
+    padding: 10px;
+  }
+  .works > img {
+    width: 100px;
+    margin: 5px;
+  }
+}
 
 /*
 footer
@@ -399,4 +428,19 @@ footer
   display: block;
   text-align: center;
   padding: 10px;
+}
+@media screen and (max-width: 768px) {
+  .footer-map {
+    padding: 15px;
+    display: block;
+  }
+  .footer-map > iframe {
+    width: 100%;
+    height: 200px;
+  }
+  .footer-mapinfo {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+  }
 }
