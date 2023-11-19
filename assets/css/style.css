@@ -415,10 +415,10 @@ footer
   margin-right: 10px;
   fill: transparent;
 }
-.footer-mapadress {
+.footer-mapaddress {
   font-style: normal;
 }
-.footer-mapadress > a {
+.footer-mapaddress > a {
   color: #fff;
 }
 .footer-line {
