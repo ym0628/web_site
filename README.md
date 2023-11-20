@@ -2788,27 +2788,397 @@ header
 
 <hr>
 
+### **<font color="SteelBlue">レスポンシブデザインの実装</font>**
+
+- レスポンシブデザインに対応するコードを実装していく。
+- 何はともあれ必要なのは、、、、これ
+
+```css
+@media screen and (max-width: 768px) { }
+```
+- 横幅が768pxまでの画面サイズの場合、この中にCSSを優先して適用する、という意味になる。
+- `768px`は、タブレットやスマホの一般的な基準値である。
+- これは今後変わるかもしれないけど、一旦これでOKであろう。
+- これを各種適用させているCSSクラスに対して、`@media screen`を定義していく。
+
+<hr>
+
+***gridのレスポンシブデザイン***
+
+- BlogとかFeatureとか、横並びにしているアイテムがあるが、、、
+- `display: flex;`にしちゃうと、スマホの場合は良くないので、
+- `display: block;`にして、1列にしてしまおう。
+
+```css
+@media screen and (max-width: 768px) {
+  .grid {
+    display: block;
+  }
+```
+
+- ひとまず、こんな感じになる。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/c36c8427-49a5-2e3b-f2f4-eb80c061433c.png" alt="スマホ画面（width:768px以下）で、要素をflexからblockに変更した画像" width=50% height=50%>
+
+- さらに、横並び2つ、3つ、4つごとに表示するう横幅の比率を指定した、`.grid-col2`などのCSSを、スマホサイズの場合は、`width: 100%;`にしてあげて、、、、
+- なおかつ、marginを上下に適当に20pxくらい余白を持たせてあげると、、
+
+```css
+@media screen and (max-width: 768px) {
+  .grid {
+    display: block;
+  }
+  .grid-col-2 > .grid-item,
+  .grid-col-3 > .grid-item,
+  .grid-col-4 > .grid-item {
+    width: 100%;
+    margin: 20px 0;
+  }
+```
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/a95d42ab-2140-ec0b-d45a-50d99e66acfa.png" alt="うスマホ画面の場合に、girid幅の比率を100%に戻してあげた画像" width=50% height=50%>
+
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/f8bbc71c-ad41-9d6e-75de-8b0830a43849.png" alt="モバイルシュミレーターの画面" width=50% height=50%>
+
+- 割とマシな感じになった。
+- こんな感じの要領で、他のセクションもレスポンシブデザインに対応していく。
+
+<hr>
+
+***aboutのレスポンシブデザイン***
+
+- `.about-image {}`イメージ画像に対して、最大でも100%の横幅を超えてはいけない！と指定。
+- また、`.about`にも、display: flex;が適用されているので、`block`に変えてあげる。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/2fd7cfab-635f-b809-694b-1c805f22cdfd.jpeg" alt="aboutの見本画像の横幅を100%を超えないように設定。" width=50% height=50%>
+
+```css
+@media screen and (max-width: 768px) {
+  .about {
+    display: block;
+  }
+  .about-image {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+  .about-headline {
+    font-size: 20px;
+    text-align: center;
+  }
+}
+```
+
+<hr>
+
+***2023/11/14***
+
+***heroのレスポンシブデザイン***
+
+```css
+@media screen and (max-width: 768px) {
+  .hero > strong {
+    font-size: 50px;
+  }
+}
+```
+- とりあえず、スマホ画面の時は120pxではデカすぎるので、
+- 50pxに調整する。
+- heroセクションのレスポンシブデザインの調整はひとまずこれだけ。
+
+
+***2023/11/15***
+
+***contactのレスポンシブデザイン***
+- contactフォームの入力欄がはみ出てしまっている。
+- `min-width: 500px;`というスタイルを適用しているのが原因。
+- これを768pxの横幅の時は違う幅に設定してあげたい。
+- 変更したいのは`.select`、`input`、`textarea`の3つ。
+
+
+```css
+@media screen and (max-width: 768px) {
+  .select,
+  .input,
+  .textarea {
+    min-width: auto;
+    width: 100%;
+  }
+}
+```
+
+- 同じスタイルを当てたい時は`,`カンマで区切ってあげると、コードを短縮できて可読性が上がる。
+- `min-width: auto;`でミニマムの幅をオートにして制限を持たせないようにする。
+- その上で、画面の横幅で最大値の幅にしてあげる。
+- すると、以下のようになる。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/01dcab15-f7bb-1fa3-bbc3-49092bc6c162.png" alt="入力フォームのレスポンシブデザインの修正後画像" width=50% height=50%>
+
+- 結構いい感じになった。
+- ただ、もう一押し。
+- `Menu`や`Name`、`Email`。。。などの項目が横並びになっていることで、
+- 少し、フォームが狭い印象。
+- `Menu`とそのフォームを横並びではなく、2行にしたい。
+- この場合は、`form-table`のスタイルをいじる。
+
+
+***form-tableのレスポンシブデザイン***
+
+- `form-table`クラス群には、`テーブル`タグを定義しているわけだが、このテーブルタグには、デフォルトでグルーピングされるという特徴がある。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/57986d11-e3c4-f733-0fda-cb4d00c4280c.png" alt="テーブルタグに自動的にグルーピングされている様子" width=50% height=50%>
+
+- これらが悪さしていることで、フォームの入る余地が狭くなってしまっている。
+- この自動的に適用されてしまっているスタイルを解除してあげる。
+- その方法は、`display: block;`を適用させてあげることだ。
+- `.form-table`タグには、それぞれ子要素として`tbody` `tr` `th` `td`が定義されている
+- それらをCSSで指定してあげて、`display: block;`を適用させてあげる。
+- 【復習】 `tr`は`table-row`、`th`は`table-head`、`td`は`table-data`となる。
+
+```css
+@media screen and (max-width: 768px) {
+  .form-table,
+  .form-table tbody,
+  .form-table tr,
+  .form-table th,
+  .form-table td {
+    display: block;
+  }
+}
+```
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/dc5faa36-75a1-53ea-4fc8-9998418a21ea.png" alt="tbodyなどのグルーピングを解除してスタイルがスッキリした様子" width=50% height=50%>
+
+
+***2023/11/18***
+
+***Worksのレスポンシブデザイン***
+
+- Worksのスタイルも、スマホサイズになると微妙なので変えていく。
+- まずは何はともあれ、デベロッパーツールを確認する。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/312a028c-0952-c3bf-67cd-250d207f3c9b.png" alt="まずはデベロッパーツールを見る癖をつけようの参考画像" width=50% height=50%>
+
+- すると、`margin`の余白をつけすぎてしまっているのが良くない。(スマホサイズの場合) 
+- なので、スマホサイズの時には、このmarginを少し削っていこう、となる。
+- また、`.works > img`にも、marginや横幅のスタイルを調整していく。
+- 完成のコードはこんな感じで、良し👍
+
+```css
+@media screen and (max-width: 768px) {
+  .works {
+    margin: 20px 0;
+    padding: 10px;
+  }
+  .works > img {
+    width: 100px;
+    margin: 5px;
+  }
+}
+```
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/5614c641-8ecf-1e3a-ded4-bcd55fec0e27.png" alt="Worksのレスポンシブデザイン完成イメージ画像" width=50% height=50%>
+
+
+***Footerのレスポンシブデザイン***
+
+- あとはFooterのレスポンシブデザインだが、、、
+- 地図とロゴの配置が狭くて気持ち悪いので、これをなんとかしていきましょう。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/9c55f42f-c6aa-b439-ce2c-dd3ccb3e8b00.png" alt="Footerのスマホ画面の現状のスクショ" width=50% height=50%>
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/6269a022-f90d-6d03-1949-30264805bab3.png" alt="デベロッパーツールでの修正点の分析スクショ" width=50% height=50%>
+
+- 何はともあれデベロッパーツール。
+- .footerクラスは多くの子要素で構成されているが、何がいけないのだろうか？
+- これを分析するのが大事。すると、、、
+- .footer-mapという子クラスのCSSが、スマホ画面で悪さしていると気づくことができる。
+- `display: flex;`により、地図とロゴが横並びになっているのをなくしたい。
+- そんな時は`display: block;`を適用させよう！
+- さらに、`padding`の上下余白が多すぎるので上下左右すべて15pxで統一する。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/e426ee16-7bea-bfca-f3b1-4249ec13872a.png" alt="要素を縦並びにしてスッキリしたスクショ" width=50% height=50%>
+
+- 続いて、`.footer-map > iframe`を修正する。
+- iframeすなわちGoogleマップの地図表示の表示比率が60%にしているのが原因で、縦長の変な感じになっている。
+- これを`width: 100%;`にすればOK!
+- 続けて、`.footer-map`のfigcaptionであるクラス`.footer-mapinfo`のロゴと説明のクラスについても、`width: 100%;`にすればOK!
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/dacd4600-4d63-0645-e798-a27d350ea501.png" alt="iframeの高さが、スマホサイズの時にちょっと高すぎる画像" width=50% height=50%>
+
+- 最後に、`iframe`のスマホ画面時の高さが気になるので、調整する。
+- 200pxくらいの感覚で良いだろう。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/a86fee48-188e-b5e5-c04d-b34384663d8a.png" alt="iframeの高さ調整後のスクショ" width=50% height=50%>
+
+- あとは好みで`textalign: center;`を入れても良いだろう。
+- 今回は入れてみた。
+- Footerのレスポンシブデザインの完成コードは以下の通り。
+
+```css
+@media screen and (max-width: 768px) {
+  .footer-map {
+    padding: 15px;
+    display: block;
+  }
+  .footer-map > iframe {
+    width: 100%;
+    height: 200px;
+  }
+  .footer-mapinfo {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+  }
+}
+```
+
+
+***sectionのレスポンシブデザイン***
+
+- `section`のスマホデザインも気になるので調整していく。
+- 書くセクションのpadding余白が大きすぎるので、少し小さくする。
+- これで、sectionは汎用的なクラスにしているので、1箇所のコードを変えるだけで全てのセクションに反映される、ここにコードの補修の効率化が図れる。
+- その他、細かいmarginやpadding、font-sizeを変更。
+- 以下、ひとまず完成したコード
+
+```css
+@media screen and (max-width: 768px) {
+  .section {
+    padding: 20px 10px;
+  }
+  .section-headline {
+    font-size: 30px;
+    margin: 0 0 20px;
+  }
+  .section-button {
+    margin: 20px 0 0;
+    text-align: center;
+  }
+}
+```
+
+***headerのレスポンシブデザイン***
+
+- ここは自分なりに、font-sizeとpaddingを微調整
+
+```css
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 5px 15px;
+    font-size: 13px;
+  }
+}
+```
+
+ここで一旦コミットしよう。
+
+<hr>
+
+#### ***<font color="Red">【疑問点】Hero画像がスマホサイズで縦幅いっぱいに広がらない</font>***
+
+- たぶん、画像が違うから、なのかなぁ？？？
+- 一旦、保留として、先にすすむ。
 
 
 
 
 
 
+<hr>
+
+### **<font color="SteelBlue">その他補足</font>**
+
+<hr>
+
+***faviconの設定***
+
+- ブラウザのタブのアイコンを`favicon`と言う。
+- これを設定するとイケてるよね！
+- 適当にアイコン画像をpngで保存したら、以下のサイトにアクセス
+- https://realfavicongenerator.net/
+- 画像をここにアップすると、いろんな種類のfavicon画像を作ってくれる。
+- さらに、htmlコードも作ってくれるので、それを`index.html`にコピペすればよい。便利！
 
 
-<br><br><br>
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/01e7db9f-8af9-b148-70d6-d0a4286b7123.png" alt="favicon generatorの利用イメージ画像" width=50% height=50%>
+
+- favicon画像ができたら、それを./assets/imagesに保存しておく。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/2d8e6259-2d1b-6ebe-18c8-246e7b5c07c5.jpeg" alt="favicon生成のダウンロード・html生成完了画面のイメージ" width=50% height=50%>
+
+- 次に、上記生成されたhtmlのソースコードをコピーして
+- `index.html`の`<header>`内に貼り付ける。
+
+```diff_html
+  <link rel="stylesheet" href="./assets/css/sanitize.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
++ <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicon/apple-touch-icon.png">
++ <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon/favicon-32x32.png">
++ <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/favicon/favicon-16x16.png">
++ <link rel="manifest" href="./assets/images/favicon/site.webmanifest">
++ <link rel="mask-icon" href="./assets/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
++ <meta name="msapplication-TileColor" content="#da532c">
++ <meta name="theme-color" content="#ffffff">
+</head>
+```
+
+:::note warn
+- `href`のパスだけ異なるので注意。
+- なぜなら、自分のディレクトリに配置しているため。
+- 自分の./assets/〜配下のパスに直さないといけない。
+:::
+
+- 上記コードの実装が済んだら、早速チェック。
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/d730d516-e4fd-b61c-eb76-09093e5e305f.jpeg" alt="favicon実装、Safariお気に入り登録時のアイコン画像" width=50% height=50%>
+
+<img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3486945/c07b09c9-6d0e-9244-43d5-d3e8b46bbd92.jpeg" alt="ブラウザのタグのfavicon画像" width=50% height=50%>
+
+- うん。だいたいOK！
+
+<hr>
+
+***html5 validatorの設定***
+
+- 自分の実装したコードがhtmlのルールの則って書かれているかを検証してくれるWEBツール
+- サイト：https://html5.validator.nu/
+- 一個エラー見つかった！
+- `fotter-mapadress`と`<adress></adress>`がタイポだった。
+- htmlとCSSを両方とも修正する。
+- 正しくは`address`
+- 最後に修正が終わったら、`app.netlyfy.com`にデプロイして完成！
+
+
+***2023/11/19***
+
+### **<font color="SteelBlue">〜〜〜❗️完成❗️〜〜〜</font>**
+
+- 完成したサイトはこちら。
+- https://65599aaebac2d271bfe6b168--graceful-paprenjak-5987b0.netlify.app/
+- お疲れ様でした。
+- 制作期間、約2ヶ月💦
+- 作るだけならそれほどかからないが、後に見返すための備忘録として記事にしていたので、かなりの期間を要してしまった。
+- いずれは、動画のように数時間で作れるようにしたい。
+
+https://65599aaebac2d271bfe6b168--graceful-paprenjak-5987b0.netlify.app/
+
+
+
+
+
+
+<br><br><br><br><br><br>
 <hr><hr><hr>
 
-### ***✅つぎはここから （動画 `1時間57分05秒`〜）***
+### ***✅次の動画は `0時間00分00秒`〜***
 
-<hr><hr><hr>
+<hr>
 <br><br><br>
-
-
 
 # よく使うhtmlタグ
 
+`### **<font color="SteelBlue">Freatureの実装〜html・CSS〜</font>**`
 `<img src="" alt="" width=50% height=50%>`
 `<img src="" alt="" width=50% height=50%>`
 `<img src="" alt="" width=50% height=50%>`
-
